@@ -146,7 +146,29 @@ public class Tree {
     }
 
     List<List<Integer>> pathLists = new ArrayList<List<Integer>>();
+    int Sum;
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        Sum = sum;
+        if (root != null) {
+            List<Integer> list = new ArrayList<Integer>();
+            pathSum(root, 0, list);
+        }
         return pathLists;
+    }
+
+    public void pathSum(TreeNode node, int sum, List<Integer> list) {
+        list.add(node.val);
+        if (node.val + sum == this.Sum) {
+            if (node.left == null && node.right == null) {
+                pathLists.add(new ArrayList<Integer>(list));
+            }
+        }
+        if (node.left != null) {
+            pathSum(node.left, node.val + sum, list);
+        }
+        if (node.right != null) {
+            pathSum(node.right, node.val + sum, list);
+        }
+        list.remove(list.size() - 1);
     }
 }
