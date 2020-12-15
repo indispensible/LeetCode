@@ -1,0 +1,152 @@
+package offer;
+
+import java.util.*;
+
+/**
+ * @author lvgang
+ * @date 2020/12/10 16:48
+ */
+public class Tree {
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        if (B != null && A != null) {
+            if (B.val == A.val) {
+                if (judgeSubStructure(A, B)) {
+                    return true;
+                }
+            }
+            if (isSubStructure(A.left, B)) {
+                return true;
+            }
+            if (isSubStructure(A.right, B)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean judgeSubStructure(TreeNode A, TreeNode B) {
+        if (B == null) {
+            return true;
+        }
+        if (A != null && A.val == B.val) {
+            if (judgeSubStructure(A.left, B.left) && judgeSubStructure(A.right, B.right)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public TreeNode mirrorTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        TreeNode tmp = root.left;
+        root.left = mirrorTree(root.right);
+        root.right = mirrorTree(tmp);
+        return root;
+    }
+
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return recurIsSymmetric(root.left, root.right);
+    }
+
+    public boolean recurIsSymmetric(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        }
+        if (left != null && right != null && left.val == right.val) {
+            if (recurIsSymmetric(left.left, right.right) && recurIsSymmetric(left.right, right.left)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int[] levelOrder(TreeNode root) {
+        int[] array = new int[1000];
+        int length = 0;
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        if (root != null) {
+            queue.add(root);
+            TreeNode node;
+            while (!queue.isEmpty()) {
+                node = queue.poll();
+                array[length++] = node.val;
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+        }
+        int[] orderArray = Arrays.copyOf(array, length);
+        return orderArray;
+    }
+
+    public List<List<Integer>> newLevelOrder(TreeNode root) {
+        List<List<Integer>> lists = new ArrayList<List<Integer>>();
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        int depth = 1;
+        if (root != null) {
+            queue.add(root);
+            newLevelOrder(queue, 1, lists);
+        }
+        return lists;
+    }
+
+    public void newLevelOrder(Queue<TreeNode> queue, int depth, List<List<Integer>> lists) {
+        if (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if (depth > lists.size()) {
+                List<Integer> list = new LinkedList<Integer>();
+                lists.add(list);
+            }
+            lists.get(depth - 1).add(node.val);
+            if (node.left != null) {
+                queue.add(node.left);
+                newLevelOrder(queue, depth + 1, lists);
+            }
+            if (node.right != null) {
+                queue.add(node.right);
+                newLevelOrder(queue, depth + 1, lists);
+            }
+        }
+    }
+
+    List<List<Integer>> lists = new ArrayList<List<Integer>>();
+    public List<List<Integer>> levelOrder3(TreeNode root) {
+        if (root != null) {
+            levelOrder3(root, 1);
+        }
+        return lists;
+    }
+
+    public void levelOrder3(TreeNode node, int depth) {
+        List<Integer> list;
+        if (depth > lists.size()) {
+            list = new LinkedList<Integer>();
+            lists.add(list);
+        }
+        list = lists.get(depth - 1);
+        if ((depth & 1) == 1) {
+            list.add(node.val);
+        } else {
+            list.add(0, node.val);
+        }
+        if (node.left != null) {
+            levelOrder3(node.left, depth + 1);
+        }
+        if (node.right != null) {
+            levelOrder3(node.right, depth + 1);
+        }
+    }
+
+    List<List<Integer>> pathLists = new ArrayList<List<Integer>>();
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        return pathLists;
+    }
+}
