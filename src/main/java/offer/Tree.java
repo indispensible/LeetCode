@@ -171,4 +171,59 @@ public class Tree {
         }
         list.remove(list.size() - 1);
     }
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        StringBuilder ser = new StringBuilder();
+        TreeNode tmp = null;
+        if (root != null) {
+            queue.add(root);
+            ser.append("[");
+            while (!queue.isEmpty()) {
+                tmp = queue.poll();
+                if (tmp != null) {
+                    ser.append(tmp.val).append(",");
+                    queue.add(tmp.left);
+                    queue.add(tmp.right);
+                } else {
+                    ser.append("null").append(",");
+                }
+            }
+            ser.deleteCharAt(ser.length() - 1).append("]");
+        }
+        return ser.toString();
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if ("".equals(data) || "[]".equals(data)) {
+            return null;
+        }
+        data = data.substring(1, data.length() - 1);
+        String[] strings = data.split(",");
+        TreeNode parent = null, cur, head = null;
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        for (int i = 0; i < strings.length; i++) {
+            if (!strings[i].equals("null")) {
+                cur = new TreeNode(Integer.parseInt(strings[i]));
+                queue.add(cur);
+            } else {
+                cur = null;
+            }
+            if (i == 0) {
+                head = cur;
+            }
+            if ((i & 1) == 1) {
+                parent = queue.poll();
+            }
+            if (parent != null && (i & 1) == 1) {
+                parent.left = cur;
+            }
+            if (parent != null && (i & 1) == 0) {
+                parent.right = cur;
+            }
+        }
+        return head;
+    }
 }
