@@ -2,6 +2,8 @@ package offer;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * @author lvgang
@@ -33,9 +35,32 @@ public class DealString {
         }
     }
 
+    public int lengthOfLongestSubstring(String s) {
+        Queue<Character> queue = new LinkedList<>();
+        int max = 0;
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (queue.contains(chars[i])) {
+                max = Math.max(max, queue.size());
+                while (queue.contains(chars[i])) {
+                    queue.poll();
+                }
+            }
+            queue.add(chars[i]);
+        }
+        max = Math.max(max, queue.size());
+        return max;
+    }
+
     public static void main(String[] args) {
         DealString dealString = new DealString();
-        String[] a = dealString.permutation("abc");
-        System.out.println(a);
+//        String[] a = dealString.permutation("abc");
+//        System.out.println(a);
+
+        System.out.println(dealString.lengthOfLongestSubstring("pwwkew"));
+        System.out.println(dealString.lengthOfLongestSubstring("dvdf"));
+        System.out.println(dealString.lengthOfLongestSubstring("aab"));
+        System.out.println(dealString.lengthOfLongestSubstring("abcabcbb"));
+        System.out.println(dealString.lengthOfLongestSubstring("bbbbbb"));
     }
 }

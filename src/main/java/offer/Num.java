@@ -96,13 +96,123 @@ public class Num {
         return Long.toString(num).charAt(n) - '0';
     }
 
+//    public String minNumber(int[] nums) {
+//        if (nums.length == 0) {
+//            return "";
+//        }
+//        quickSorted(nums, 0, nums.length - 1);
+//        StringBuilder stringBuilder = new StringBuilder();
+//        for (int i = 0; i < nums.length; i++) {
+//            stringBuilder.append(String.valueOf(nums[i]));
+//        }
+//        return stringBuilder.toString();
+//    }
+//
+//    public void quickSorted(int[] nums, int low, int high) {
+//        if (low < high) {
+//            int index = getIndex(nums, low, high);
+//            quickSorted(nums, index + 1, high);
+//            quickSorted(nums, low, index - 1);
+//        }
+//    }
+//
+//    public int getIndex(int[] nums, int low, int high) {
+//        int tmp = nums[low];
+//        while (low < high) {
+//            while (low < high && judgeNum(nums[high], tmp)) {
+//                high--;
+//            }
+//            nums[low] = nums[high];
+//            while (low < high && judgeNum(tmp, nums[low])) {
+//                low++;
+//            }
+//            nums[high] = nums[low];
+//        }
+//        nums[low] = tmp;
+//        return low;
+//    }
+//
+//    public boolean judgeNum(int num1, int num2) {
+//        String num1String = String.valueOf(num1), num2String = String.valueOf(num2);
+//        StringBuilder num1Str = new StringBuilder(num1String), num2Str = new StringBuilder(num2String);
+//        int num1Length = num1Str.length(), num2Length = num2Str.length();
+//        char num1End = num1Str.charAt(0), num2End = num2Str.charAt(0);
+//        char[] chars1 = num1String.toCharArray(), chars2 = num2String.toCharArray();
+//        for (int i = 1; i < chars1.length; i++) {
+//            if (chars1[i] > num1End) {
+//                num1End = chars1[i];
+//            }
+//        }
+//        for (int i = 1; i < chars2.length; i++) {
+//            if (chars2[i] > num2End) {
+//                num2End = chars2[i];
+//            }
+//        }
+//        if (num1Length > num2Length) {
+//            for (int i = 0; i < num1Length - num2Length; i++) {
+//                num2Str.append(num2End);
+//            }
+//        } else {
+//            for (int i = 0; i < num2Length - num1Length; i++) {
+//                num1Str.append(num1End);
+//            }
+//        }
+//        if (Long.valueOf(num1Str.toString()) >= Long.valueOf(num2Str.toString())) {
+//            return true;
+//        }
+//        return false;
+//    }
+
+    public String minNumber(int[] nums) {
+        String[] arrStr = new String[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            arrStr[i] = String.valueOf(nums[i]);
+        }
+        Arrays.sort(arrStr, (x, y) -> (x + y).compareTo(y + x));
+        StringBuilder s = new StringBuilder();
+        for (String str : arrStr) {
+            s.append(str);
+        }
+        return s.toString();
+    }
+
+    public int translateNum(int num) {
+        // 动态规划
+        char[] chars = String.valueOf(num).toCharArray();
+        int[] dp = new int[chars.length];
+        if (chars.length == 1) {
+            dp[0] = 1;
+        } else {
+            dp[0] = 1;
+            dp[1] = 2;
+            if (Integer.parseInt(String.valueOf(chars, 0, 2)) > 25 || Integer.parseInt(String.valueOf(chars, 0, 2)) < 10) {
+                dp[1] = 1;
+            }
+            for (int i = 2; i < chars.length; i++) {
+                dp[i] = dp[i - 1];
+                if (('0' < chars[i - 1] && chars[i - 1] < '2') || (chars[i - 1] == '2' && chars[i] <= '5')) {
+                    dp[i] += dp[i - 2];
+                }
+            }
+        }
+        return dp[chars.length - 1];
+    }
+
     public static void main(String[] args) {
         Num num = new Num();
-        System.out.println(num.findNthDigit(13));
-        System.out.println(num.findNthDigit(9));
-        System.out.println(num.findNthDigit(1000000000));
-        System.out.println(num.findNthDigit(3));
-        System.out.println(num.findNthDigit(11));
+
+        num.translateNum(506);
+
+//        System.out.println(num.findNthDigit(13));
+//        System.out.println(num.findNthDigit(9));
+//        System.out.println(num.findNthDigit(1000000000));
+//        System.out.println(num.findNthDigit(3));
+//        System.out.println(num.findNthDigit(11));
+//        int[] nums = {824, 938,1399,5607,6973,5703,9609,4398,8247};
+//        int[] nums = {12, 121};
+//        String a = "a";
+//        a.compareTo("b");
+//        num.minNumber(nums);
     }
 
 }
