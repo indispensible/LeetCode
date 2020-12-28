@@ -52,15 +52,27 @@ public class DealString {
         return max;
     }
 
+    public String reverseWords(String s) {
+        StringBuilder stringBuilder = new StringBuilder();
+        s = s.trim();
+        for (String str : s.split(" ")) {
+            if (!str.equals("")) {
+                stringBuilder.insert(0, str.trim() + " ");
+            }
+        }
+        return stringBuilder.toString().trim();
+    }
+
     public static void main(String[] args) {
         DealString dealString = new DealString();
+        dealString.reverseWords("a good   example");
 //        String[] a = dealString.permutation("abc");
 //        System.out.println(a);
 
-        System.out.println(dealString.lengthOfLongestSubstring("pwwkew"));
-        System.out.println(dealString.lengthOfLongestSubstring("dvdf"));
-        System.out.println(dealString.lengthOfLongestSubstring("aab"));
-        System.out.println(dealString.lengthOfLongestSubstring("abcabcbb"));
-        System.out.println(dealString.lengthOfLongestSubstring("bbbbbb"));
+//        System.out.println(dealString.lengthOfLongestSubstring("pwwkew"));
+//        System.out.println(dealString.lengthOfLongestSubstring("dvdf"));
+//        System.out.println(dealString.lengthOfLongestSubstring("aab"));
+//        System.out.println(dealString.lengthOfLongestSubstring("abcabcbb"));
+//        System.out.println(dealString.lengthOfLongestSubstring("bbbbbb"));
     }
 }

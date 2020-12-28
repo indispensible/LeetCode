@@ -198,10 +198,154 @@ public class Num {
         return dp[chars.length - 1];
     }
 
+    public int nthUglyNumber(int n) {
+        int a = 0, b = 0, c = 0;
+        int[] dp = new int[n];
+        dp[0] = 1;
+        return dp[n - 1];
+    }
+
+
+    public int missingNumber(int[] nums) {
+        return missingNumber(nums, 0, nums.length - 1);
+    }
+
+    public int missingNumber(int[] nums, int left, int right) {
+        int index = (left + right) >> 1;
+        if (nums[index] != index) {
+            if (index == 0 || nums[index - 1] == index - 1) {
+                return index;
+            }
+            return missingNumber(nums, left, index - 1);
+        } else {
+            if (left == right) {
+                return nums.length;
+            }
+            return missingNumber(nums, index + 1, right);
+        }
+    }
+
+    public int[] singleNumbers(int[] nums) {
+        int num = 0, mask, num1 = 0, num2 = 0;
+        for (int i = 0; i < nums.length; i++) {
+            num ^= nums[i];
+        }
+        mask = num & (-num);
+        for (int i = 0; i < nums.length; i++) {
+            if ((nums[i] & mask) == 0) {
+                num1 ^= nums[i];
+            } else {
+                num2 ^= nums[i];
+            }
+        }
+        return new int[]{num1, num2};
+    }
+
+    public int newSingleNumber(int[] nums) {
+        int[] counts = new int[32];
+        int num, j;
+        for (int value : nums) {
+            num = value;
+            for (j = 0; j < 32; j++) {
+                counts[j] += num & 1;
+                num >>= 1;
+            }
+        }
+        num = 0;
+        for (int i = 31; i >= 0; i--) {
+            num <<= 1;
+            num |= counts[i] % 3;
+        }
+        return num;
+    }
+
+    public int[] twoSum(int[] nums, int target) {
+        int i = 0, j = nums.length - 1, mid;
+        if (nums[nums.length - 1] <= target) {
+            j = nums.length - 1;
+        } else {
+            mid = nums.length >>> 1;
+            while (!(nums[mid] <= target && nums[mid + 1] > target)) {
+                if (nums[mid + 1] <= target) {
+                    i = mid;
+                    mid = (i + j) >>> 1;
+                } else {
+                    j = mid;
+                    mid = (i + j) >>> 1;
+                }
+            }
+            j = mid;
+        }
+        i = 0;
+        while ((nums[i] + nums[j]) != target) {
+            if (nums[i] + nums[j] > target) {
+                j--;
+            } else {
+                i++;
+            }
+        }
+        return new int[]{nums[i], nums[j]};
+    }
+
+    public int[][] findContinuousSequence(int target) {
+        List<int[]> lists = new ArrayList<>();
+        int n = 2, partSum = n * (n - 1) >> 1, i;
+        while (partSum < target) {
+            if ((target - partSum) % n == 0) {
+                i = (target - partSum) / n;
+                int[] ints = new int[n];
+                for (int j = 0; j < n; j++) {
+                    ints[j] = i + j;
+                }
+                lists.add(ints);
+            }
+            n++;
+            partSum = n * (n - 1) >> 1;
+        }
+        int[][] newInts = new int[lists.size()][];
+        for (i = 0; i < lists.size(); i++) {
+            newInts[i] = lists.get(lists.size() - i - 1);
+        }
+        return newInts;
+    }
+
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums.length == 0) {
+            return new int[0];
+        }
+        Deque<Integer> deque = new LinkedList<>();
+        int[] res = new int[nums.length - k + 1];
+        int i = -k + 1, j = 0;
+        while (j < nums.length) {
+            while (!deque.isEmpty() && deque.getLast() < nums[j]) {
+                deque.pollLast();
+            }
+            deque.add(nums[j]);
+            if (i >= 0) {
+                res[i] = deque.getFirst();
+                if (nums[i] == deque.getFirst()) {
+                    deque.poll();
+                }
+            }
+            i++;
+            j++;
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
         Num num = new Num();
 
-        num.translateNum(506);
+        num.findContinuousSequence(9);
+
+//        int[] nums = {45,46,67,73,74,74,77,83,89,98};
+//        num.twoSum(nums, 147);
+//        int[] nums = {3, 4, 3, 3};
+//        num.newSingleNumber(nums);
+
+//        num.missingNumber(nums);
+
+//        num.translateNum(506);
 
 //        System.out.println(num.findNthDigit(13));
 //        System.out.println(num.findNthDigit(9));

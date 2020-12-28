@@ -226,4 +226,39 @@ public class Tree {
         }
         return head;
     }
+
+    private boolean judge = true;
+
+    public boolean isBalanced(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        isBalanced(root, 1);
+        return judge;
+    }
+
+    public int isBalanced(TreeNode node, int depth) {
+        int leftDepth = depth, rightDepth = depth;
+        if (node.left != null && judge) {
+            leftDepth = isBalanced(node.left, depth + 1);
+        }
+        if (node.right != null && judge) {
+            rightDepth = isBalanced(node.right, depth + 1);
+        }
+        if (-1 > leftDepth - rightDepth || 1 < leftDepth - rightDepth) {
+            judge = false;
+        }
+        return Math.max(leftDepth, rightDepth);
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        TreeNode node1 = new TreeNode(1);
+        TreeNode node2 = new TreeNode(1);
+        TreeNode node3 = new TreeNode(1);
+        TreeNode node4 = new TreeNode(1);
+        TreeNode node5 = new TreeNode(1);
+        TreeNode node6 = new TreeNode(1);
+
+    }
 }
