@@ -11,7 +11,7 @@ public class TestBit {
 
     public static void main(String[] args) {
         TestBit testBit = new TestBit();
-        System.out.println(10 ^ 10);
+        System.out.println((10 ^ 10) == 0);
         System.out.println(8 ^ 8);
         System.out.println(1234234 ^ 1234234);
 //        lowbit(-8);

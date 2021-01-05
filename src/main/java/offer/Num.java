@@ -333,10 +333,34 @@ public class Num {
         return res;
     }
 
+    public double[] dicesProbability(int n) {
+        double count = Math.pow(6, n);
+        double[][] dp = new double[n + 1][6 * n + 1];
+        double[] doubles = new double[5 * n + 1];
+        for (int i = 1; i <= 6; i++) {
+            dp[1][i] = 1;
+        }
+        for (int i = 2; i <= n; i++) {
+            for (int j = i; j <= 6 * i; j++) {
+                for (int m = 1; m <= 6; m++) {
+                    if (j <= m) {
+                        break;
+                    }
+                    dp[i][j] += dp[i - 1][j - m];
+                }
+            }
+        }
+        for (int i = n; i <= 6 * n; i++) {
+            doubles[i - n] = dp[n][i] / count;
+        }
+        return doubles;
+    }
+
     public static void main(String[] args) {
         Num num = new Num();
 
-        num.findContinuousSequence(9);
+        num.dicesProbability(2);
+//        num.findContinuousSequence(9);
 
 //        int[] nums = {45,46,67,73,74,74,77,83,89,98};
 //        num.twoSum(nums, 147);
