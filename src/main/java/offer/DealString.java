@@ -1,9 +1,6 @@
 package offer;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * @author lvgang
@@ -63,9 +60,69 @@ public class DealString {
         return stringBuilder.toString().trim();
     }
 
+    public String longestPalindrome(String s) {
+        String longest = "";
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        for (int l = 0; l < s.length(); l++) {
+            for (int i = 0; i < s.length() - l; i++) {
+                int j = i + l;
+                if (i == j) {
+                    dp[i][j] = true;
+                } else {
+                    boolean b = s.charAt(i) == s.charAt(j);
+                    if (l == 1) {
+                        dp[i][j] = b;
+                    } else {
+                        dp[i][j] = b && dp[i + 1][j - 1];
+                    }
+                }
+                if (dp[i][j] && (j - i + 1) > longest.length()) {
+                    longest = s.substring(i, j + 1);
+                }
+            }
+        }
+        return longest;
+    }
+
+    public boolean isMatch(String s, String p) {
+        int m = s.length(), n = p.length();
+        boolean[][] dp = new boolean[m + 1][n + 1];
+        dp[0][0] = true;
+        for (int i = 0; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (p.charAt(j - 1) == '*') {
+                    if (j == 1) {
+                        if (i == 0) {
+                            dp[i][j] = true;
+                        }
+                        dp[i][j] = false;
+                        continue;
+                    }
+                    dp[i][j] = dp[i][j - 2];
+                    if (i > 0) {
+                        if (p.charAt(j - 2) == '.' || p.charAt(j - 2) == s.charAt(i - 1)) {
+                            dp[i][j] = dp[i - 1][j] || dp[i][j - 2];
+                        }
+                    }
+                } else {
+                    dp[i][j] = false;
+                    if (i != 0) {
+                        dp[i][j] = dp[i - 1][j - 1] && (s.charAt(i - 1) == p.charAt(j - 1) || p.charAt(j - 1) == '.');
+                    }
+                }
+            }
+        }
+        return dp[m][n];
+    }
+
     public static void main(String[] args) {
         DealString dealString = new DealString();
-        dealString.reverseWords("a good   example");
+
+        System.out.println(dealString.isMatch("mississippi", "mis*is*ip*."));
+
+//        dealString.longestPalindrome("babad");
+
+//        dealString.reverseWords("a good   example");
 //        String[] a = dealString.permutation("abc");
 //        System.out.println(a);
 

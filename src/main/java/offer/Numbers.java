@@ -1,5 +1,9 @@
 package offer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author lvgang
  * @date 2020/12/8 9:40
@@ -91,6 +95,36 @@ public class Numbers {
             }
         }
         return judge;
+    }
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> lists = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        Arrays.sort(candidates);
+        int left = 0, right = 0, sum = 0, i, j;
+        while (2 * candidates[left] <= target) {
+            j = target / candidates[left];
+            for (i = 1; i <= j; i++) {
+                sum = i * candidates[left];
+                list.add(candidates[left]);
+                if (sum == target) {
+                    lists.add((List<Integer>) ((ArrayList<Integer>) list).clone());
+                    break;
+                }
+                for (right = left + 1; right < candidates.length; right++) {
+                    if (sum + candidates[right] > target) {
+                        break;
+                    } else if (sum + candidates[right] == target) {
+                        list.add(candidates[right]);
+                        lists.add((List<Integer>) ((ArrayList<Integer>) list).clone());
+                        list.remove(list.size() - 1);
+                    }
+                }
+            }
+            list.clear();
+            left++;
+        }
+        return lists;
     }
 
     public static void main(String[] args) {

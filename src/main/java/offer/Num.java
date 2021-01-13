@@ -356,10 +356,79 @@ public class Num {
         return doubles;
     }
 
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> lists = new ArrayList<>();
+        List<Integer> list = new ArrayList<Integer>();
+        Arrays.sort(nums);
+        int left = 0, right = nums.length - 1;
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            left = i + 1;
+            right = nums.length - 1;
+            while (left != right) {
+                if (left > i + 1 && nums[left] == nums[left - 1]) {
+                    continue;
+                }
+                if (nums[i] + nums[left] + nums[right] > 0) {
+                    right--;
+                } else if (nums[i] + nums[left] + nums[right] < 0) {
+                    left++;
+                } else {
+                    list.clear();
+                    list.add(nums[i]);
+                    list.add(nums[left]);
+                    list.add(nums[right]);
+                    lists.add(list);
+                    left++;
+                    right--;
+                }
+            }
+        }
+        return lists;
+    }
+
+    public int search(int[] nums, int target) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            if (nums[0] == target) {
+                return 0;
+            }
+            return -1;
+        }
+        int l = 0, r = nums.length - 1, mid;
+        while (l <= r) {
+            mid = (l + r) >> 1;
+            if (nums[mid] == target) {
+                return mid;
+            }
+            if (nums[0] <= nums[mid]) {
+                if (nums[0] <= target && target < nums[mid]) {
+                    r = mid - 1;
+                } else {
+                    l = mid + 1;
+                }
+            } else {
+                if (nums[mid] < target && target <= nums[nums.length - 1]) {
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            }
+        }
+        return -1;
+    }
+
     public static void main(String[] args) {
         Num num = new Num();
 
-        num.dicesProbability(2);
+        int[] nums = {3, 1};
+        System.out.println(num.search(nums, 1));
+
+//        num.dicesProbability(2);
 //        num.findContinuousSequence(9);
 
 //        int[] nums = {45,46,67,73,74,74,77,83,89,98};
