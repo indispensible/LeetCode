@@ -422,11 +422,71 @@ public class Num {
         return -1;
     }
 
+    public int trap(int[] height) {
+        if (height.length <= 2) {
+            return 0;
+        }
+        int l = 0, h = height[l], r = 1, res = 0;
+        for (; r < height.length; r++) {
+            if (r - l > 1 && height[r] < height[r - 1]) {
+                h = height[r - 1];
+                while (l != r - 1) {
+                    if (h - height[l] > 0) {
+                        res += h - height[l];
+                    }
+                    l++;
+                }
+            }
+            if (height[r] > h) {
+                while (l != r) {
+                    if (h - height[l] > 0) {
+                        res += h - height[l];
+                    }
+                    l++;
+                }
+                h = height[l];
+            }
+        }
+        h = height[r - 1];
+        while (l != r - 1) {
+            if (h - height[l] > 0) {
+                res += h - height[l];
+            }
+            l++;
+        }
+        return res;
+    }
+
+    public int[][] merge(int[][] intervals) {
+        if (intervals.length == 0) {
+            return new int[0][2];
+        }
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] nums1, int[] nums2) {
+                return nums1[0] - nums2[0];
+            }
+        });
+        List<int[]> list = new ArrayList<>();
+        for (int[] nums : intervals) {
+            if (list.isEmpty()) {
+                list.add(nums);
+                continue;
+            }
+            if (list.get(list.size() - 1)[1] >= nums[0]) {
+                list.get(list.size() - 1)[1] = Math.max(list.get(list.size() - 1)[1], nums[1]);
+            } else {
+                list.add(nums);
+            }
+        }
+        return list.toArray(new int[intervals.length][]);
+    }
+
     public static void main(String[] args) {
         Num num = new Num();
 
-        int[] nums = {3, 1};
-        System.out.println(num.search(nums, 1));
+        int[] nums = {0,1,0,2,1,0,1,3,2,1,2,1};
+        System.out.println(num.trap(nums));
 
 //        num.dicesProbability(2);
 //        num.findContinuousSequence(9);

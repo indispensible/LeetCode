@@ -115,10 +115,26 @@ public class DealString {
         return dp[m][n];
     }
 
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String, List<String>> map = new HashMap<String, List<String>>(16);
+        for (String str : strs) {
+            char[] chars = str.toCharArray();
+            Arrays.sort(chars);
+            String key = new String(chars);
+            List<String> list =  map.getOrDefault(key, new ArrayList<String>());
+            list.add(str);
+            map.put(key, list);
+        }
+        return new ArrayList<List<String>>(map.values());
+    }
+
     public static void main(String[] args) {
         DealString dealString = new DealString();
 
-        System.out.println(dealString.isMatch("mississippi", "mis*is*ip*."));
+//        System.out.println(dealString.isMatch("mississippi", "mis*is*ip*."));
+
+        String[] strs = {"eat","tea","tan","ate","nat","bat"};
+        dealString.groupAnagrams(strs);
 
 //        dealString.longestPalindrome("babad");
 

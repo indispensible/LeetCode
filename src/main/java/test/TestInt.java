@@ -12,5 +12,6 @@ public class TestInt {
         System.out.println(System.identityHashCode(b));
         a = 2;
         System.out.println(System.identityHashCode(a));
+        int min = Integer.MIN_VALUE;
     }
 }
