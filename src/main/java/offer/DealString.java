@@ -128,13 +128,78 @@ public class DealString {
         return new ArrayList<List<String>>(map.values());
     }
 
+    public String minWindow4tNotDuplicate(String s, String t) {
+        int l = Integer.MAX_VALUE - 1, r = -1, minL = Integer.MAX_VALUE - 1, minR = -1;
+        Map<Character, Integer> map = new HashMap<>(64);
+        for (int i = 0; i < t.length(); i++) {
+            map.put(t.charAt(i), -1);
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (map.containsKey(s.charAt(i))) {
+                map.put(s.charAt(i), i);
+                l = Integer.MAX_VALUE;
+                r = i;
+                for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+                    if (entry.getValue() < l) {
+                        l = entry.getValue();
+                    }
+                }
+                if (l >= 0 && r - l < Math.abs(minR - minL)) {
+                    minL = l;
+                    minR = r;
+                }
+            }
+        }
+        if (minL >= 0 && minR >= 0 && minR >= minL) {
+            return s.substring(minL, minR + 1);
+        }
+        return "";
+    }
+
+    Map<Character, Integer> map = new HashMap<>(64);
+
+    public String minWindow(String s, String t) {
+        int l = 0, r = 0;
+        String res = "", tmp = "";
+        for (int i = 0; i < t.length(); i++) {
+            map.put(t.charAt(i), map.getOrDefault(t.charAt(i), 0) + 1);
+        }
+        for (r = 0; r < s.length(); r++) {
+            if (map.containsKey(s.charAt(r))) {
+                map.put(s.charAt(r), map.get(s.charAt(r)) - 1);
+                while (check() && l <= r) {
+                    tmp = s.substring(l, r + 1);
+                    if (tmp.length() < res.length() || res.equals("")) {
+                        res = tmp;
+                    }
+                    if (map.containsKey(s.charAt(l))) {
+                        map.put(s.charAt(l), map.get(s.charAt(l)) + 1);
+                    }
+                    l++;
+                }
+            }
+        }
+        return res;
+    }
+
+    public boolean check() {
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            if (entry.getValue() > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
         DealString dealString = new DealString();
 
+        System.out.println(dealString.minWindow("ADOBECODEBANC", "ABCA"));
+
 //        System.out.println(dealString.isMatch("mississippi", "mis*is*ip*."));
 
-        String[] strs = {"eat","tea","tan","ate","nat","bat"};
-        dealString.groupAnagrams(strs);
+//        String[] strs = {"eat","tea","tan","ate","nat","bat"};
+//        dealString.groupAnagrams(strs);
 
 //        dealString.longestPalindrome("babad");
 

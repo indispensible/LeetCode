@@ -9,9 +9,10 @@ public class TestString {
     String b = "a";
 
     public static void main(String[] args) {
-        String data = "abcde";
+        String data = "a1bcdeabcde";
         String test1 = "abcde";
         String test2 = new String("abcde");
+        System.out.println(data.indexOf("1"));
         System.out.println(data == test1);
         System.out.println(data == test2);
         System.out.println(data.hashCode() == test2.hashCode());
