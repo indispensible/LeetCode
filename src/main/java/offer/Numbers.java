@@ -3,6 +3,7 @@ package offer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * @author lvgang
@@ -127,21 +128,69 @@ public class Numbers {
         return lists;
     }
 
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        int max = 0;
+        int[] heights = new int[matrix[0].length];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                heights[j] = 0;
+                if (matrix[i][j] == '1') {
+                    for (int idx = i; idx >= 0; idx--) {
+                        if (matrix[idx][j] == '0') {
+                            break;
+                        }
+                        heights[j]++;
+                    }
+                }
+            }
+            max = Math.max(max, largestRectangleArea(heights));
+        }
+        return max;
+    }
+
+    public int largestRectangleArea(int[] heights) {
+        Stack<Integer> stack = new Stack<>();
+        int max = 0, idx = 0, i = 0;
+        for (; i < heights.length; i++) {
+            if (stack.empty() || heights[i] > heights[stack.peek()]) {
+                stack.push(i);
+            } else if (heights[i] < heights[stack.peek()]) {
+                while (stack.size() > 0 && heights[i] <= heights[stack.peek()]) {
+                    idx = stack.pop();
+                    max = Math.max(max, (i - idx) * heights[idx]);
+                }
+                stack.push(idx);
+                heights[idx] = heights[i];
+            }
+        }
+        while (stack.size() > 0) {
+            idx = stack.pop();
+            max = Math.max(max, (i - idx) * heights[idx]);
+        }
+        return max;
+    }
+
     public static void main(String[] args) {
-        float a = 9.f;
         Numbers numbers = new Numbers();
-        System.out.println(numbers.isNumber("+.8"));
-        System.out.println(numbers.isNumber("1e."));
-        System.out.println(numbers.isNumber("0e"));
-        System.out.println(numbers.isNumber("1 4"));
-        System.out.println(numbers.isNumber("e9"));
-        System.out.println(numbers.isNumber("."));
-        System.out.println(numbers.isNumber("+e"));
-        System.out.println(numbers.isNumber(" "));
-        System.out.println(numbers.isNumber("+."));
-        System.out.println(numbers.isNumber(".0"));
-        System.out.println(numbers.isNumber(" 0"));
-        System.out.println(numbers.isNumber("0."));
-        System.out.println(numbers.isNumber("-1E-16"));
+        char[][] matrix = {{}};
+        System.out.println(numbers.maximalRectangle(matrix));
+//        float a = 9.f;
+//        Numbers numbers = new Numbers();
+//        System.out.println(numbers.isNumber("+.8"));
+//        System.out.println(numbers.isNumber("1e."));
+//        System.out.println(numbers.isNumber("0e"));
+//        System.out.println(numbers.isNumber("1 4"));
+//        System.out.println(numbers.isNumber("e9"));
+//        System.out.println(numbers.isNumber("."));
+//        System.out.println(numbers.isNumber("+e"));
+//        System.out.println(numbers.isNumber(" "));
+//        System.out.println(numbers.isNumber("+."));
+//        System.out.println(numbers.isNumber(".0"));
+//        System.out.println(numbers.isNumber(" 0"));
+//        System.out.println(numbers.isNumber("0."));
+//        System.out.println(numbers.isNumber("-1E-16"));
     }
 }

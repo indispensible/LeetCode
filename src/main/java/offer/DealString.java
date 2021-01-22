@@ -191,6 +191,51 @@ public class DealString {
         return true;
     }
 
+    boolean judge = false;
+
+    public boolean exist(char[][] board, String word) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                recall(board, word, i, j);
+                if (judge) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void recall(char[][] board, String word, int i, int j) {
+        if (word.equals("")) {
+            judge = true;
+            return;
+        }
+        if (i < 0 || i > board.length - 1 ) {
+            return;
+        }
+        if (j < 0 || j > board[0].length - 1) {
+            return;
+        }
+        char tmp = board[i][j];
+        if (word.charAt(0) == tmp) {
+            word = word.substring(1);
+            board[i][j] = '_';
+            if (!judge) {
+                recall(board, word, i - 1, j);
+            }
+            if (!judge) {
+                recall(board, word, i + 1, j);
+            }
+            if (!judge) {
+                recall(board, word, i, j - 1);
+            }
+            if (!judge) {
+                recall(board, word, i, j + 1);
+            }
+            board[i][j] = tmp;
+        }
+    }
+
     public static void main(String[] args) {
         DealString dealString = new DealString();
 

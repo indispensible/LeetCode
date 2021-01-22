@@ -3,6 +3,8 @@ package redis;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.SetParams;
 
+import org.springframework.data.redis.connection.Message;
+
 import java.util.HashMap;
 import java.util.Map;
 

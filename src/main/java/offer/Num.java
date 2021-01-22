@@ -482,11 +482,33 @@ public class Num {
         return list.toArray(new int[intervals.length][]);
     }
 
+    public int largestRectangleArea(int[] heights) {
+        Stack<Integer> stack = new Stack<Integer>();
+        int max = 0, idx = 0;
+        for (int i = 0; i < heights.length; i++) {
+            if (stack.empty() || heights[i] > heights[stack.peek()]) {
+                stack.push(i);
+            } else if (heights[i] < heights[stack.peek()]) {
+                while (!stack.empty() && heights[i] <= heights[stack.peek()]) {
+                    idx = stack.pop();
+                    max = Math.max(max, (i - idx) * heights[idx]);
+                }
+                heights[idx] = heights[i];
+                stack.push(idx);
+            }
+        }
+        while (stack.size() > 0) {
+            idx = stack.pop();
+            max = Math.max(max, (heights.length - idx) * heights[idx]);
+        }
+        return max;
+    }
+
     public static void main(String[] args) {
         Num num = new Num();
 
-        int[] nums = {0,1,0,2,1,0,1,3,2,1,2,1};
-        System.out.println(num.trap(nums));
+        int[] nums = {2,1,5,6,2,3};
+        System.out.println(num.largestRectangleArea(nums));
 
 //        num.dicesProbability(2);
 //        num.findContinuousSequence(9);
